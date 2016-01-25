@@ -2,19 +2,20 @@
 
 var template = require('string-template');
 var extend = require('xtend/mutable');
-var assert = require('assert');
-
 var isWordBoundary = /[_.-](\w|$)/g;
 
 module.exports = TypedError;
 
 function TypedError(args) {
-    assert(args, 'TypedError: must specify options');
-    assert(args.type, 'TypedError: must specify options.type');
-    assert(args.message, 'TypedError: must specify options.message');
+    if (!args)
+      throw new Error('TypedError: must specify options');
+    if (!args.type)
+      throw new Error(args.type, 'TypedError: must specify options.type');
+    if (!args.message)
+      throw new Error(args.message, 'TypedError: must specify options.message');
 
-    assert(!has(args, 'fullType'),
-        'TypedError: fullType field is reserved');
+    if (args.fullType)
+      throw new Error('TypedError: fullType field is reserved');
 
     var message = args.message;
     if (args.type && !args.name) {
